@@ -1,0 +1,12 @@
+{
+  "title": "Lyrics Finder",
+  "artist_placeholder": "Artist name",
+  "song_placeholder": "Song name",
+  "search_button": "Search",
+  "lyrics_placeholder": "Lyrics will appear here...",
+  "home": "Home",
+  "about": "About",
+  "favorites": "Favorites",
+  "top_artists": "Top Artists",
+  "about_text": "This app lets you search for song lyrics easily."
+}

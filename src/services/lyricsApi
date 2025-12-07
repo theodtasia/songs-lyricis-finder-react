@@ -1,0 +1,10 @@
+import axios from "axios";
+export const getLyrics = async (artist, song) => {
+  try {
+    const response = await axios.get(`https://api.lyrics.ovh/v1/${artist}/${song}`);
+    return response.data.lyrics;
+  } catch (error) {
+    console.error(error);
+    return "Lyrics not found.";
+  }
+};

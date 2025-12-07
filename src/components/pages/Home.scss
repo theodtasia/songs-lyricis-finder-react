@@ -1,0 +1,7 @@
+@use './../../scss/variables' as *;
+.home__title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: $primary-color;
+}
