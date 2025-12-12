@@ -13,13 +13,13 @@ function Home() {
   const [lyrics, setLyrics] = useState("");
   const [loading, setLoading] = useState(false);
   const validationSchema = Yup.object({
-    artist: Yup.string().required("errors.artist_required"),
-    song: Yup.string().required("errors.song_required"),
+    artist: Yup.string().required(t("errors.artist_required")),
+    song: Yup.string().required(t("errors.song_required")),
   });
 
   return (
     <div className="home">
-      <h1 className="home__title">Lyrics Finder</h1>
+      <h1 className="home__title">{t('title')}</h1>
       <Formik
         initialValues={{ artist: "", song: "" }}
         validationSchema={validationSchema}
