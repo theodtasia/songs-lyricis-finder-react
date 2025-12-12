@@ -8,5 +8,11 @@
   "about": "About",
   "favorites": "Favorites",
   "top_artists": "Top Artists",
-  "about_text": "This app lets you search for song lyrics easily."
+  "about_text": "This app lets you search for song lyrics easily.",
+  "errors": {
+    "artist_required": "Artist name is required",
+    "song_required": "Song name is required",
+    "lyrics_not_found": "Lyrics not found. Please check the artist and song name."
+  },
+  "lyrics_here": "Lyrics will appear here..."
 }

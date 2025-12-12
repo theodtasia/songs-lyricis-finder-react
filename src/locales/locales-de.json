@@ -8,5 +8,11 @@
   "about": "Über uns",
   "favorites": "Favoriten",
   "top_artists": "Top Künstler",
-  "about_text": "Diese App ermöglicht es dir, Liedtexte einfach zu suchen."
+  "about_text": "Diese App ermöglicht es dir, Liedtexte einfach zu suchen.",
+  "errors": {
+    "artist_required": "Künstlername ist erforderlich",
+    "song_required": "Songname ist erforderlich",
+    "lyrics_not_found": "Liedtext nicht gefunden. Bitte überprüfe Künstler und Songnamen."
+  },
+  "lyrics_here": "Hier erscheinen die Liedtexte..."
 }

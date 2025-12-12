@@ -1,13 +1,54 @@
-.button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: white;
+@use './../../scss/variables' as *;
 
-  &:hover {
-    background-color: #0056b3;
-  }
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  color: $primary-color;
+  background-color: $card-bg;
+  cursor: pointer;
+  transition: background-color 0.12s ease, opacity 0.12s ease, transform 0.06s ease;
+  text-decoration: none;
+}
+
+.button:not(.button--selected):not(.button--disabled):hover {
+  background-color: $accent-color;
+  color: $white;
+  transform: translateY(-1px);
+}
+
+.button--selected {
+  background-color: $accent-color;
+  color: $white;
+  cursor: default;
+  transform: none;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.04);
+}
+
+.button--disabled {
+  background-color: $light-gray;
+  color: $text-muted;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.button--selected.button--disabled {
+  background-color: $accent-color;
+  color: $white;
+  cursor: default;
+  pointer-events: none;
+}
+
+.button__label {
+  display: inline-block;
+  line-height: 1;
 }

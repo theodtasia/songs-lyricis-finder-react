@@ -1,14 +1,43 @@
+@use './../../scss/breakpoints' as bp;
+@use './../../scss/variables' as *;
+
 .input-field {
   display: block;
   width: 100%;
+  min-width: 25rem; 
   padding: 0.5rem;
-  margin-bottom: 1rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid $light-gray;
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  height: 3.5rem;
+  line-height: 1.25rem;
+  color: $black;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
 
   &:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: $primary-color;
   }
+
+  &.input-error {
+    border-color: $danger;
+  }
+
+  &:disabled {
+    background-color: $light-gray;
+    cursor: not-allowed;
+  }
+
+  @include bp.respond-to(sm) {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+.input-error-message {
+  color: $danger;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
 }

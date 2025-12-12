@@ -1,12 +1,13 @@
 import './InputField.scss';
-function InputField({ placeholder, value, onChange }) {
+
+function InputField({ field, placeholder, className = "", ...props }) {
   return (
     <input
-      className="input-field"
+      className={`input-field ${className}`} // apply CSS
       type="text"
       placeholder={placeholder}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
+      {...field}      
+      {...props}
     />
   );
 }

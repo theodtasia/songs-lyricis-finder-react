@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { useState, useMemo } from "react";
-import InputField from "../commonComponents/InputField";
+import { useState } from "react";
+import Button from "../commonComponents/Button";
+import LyricsDisplay from "../commonComponents/LyricsDisplay";
+import { getLyrics } from "../../services/lyricsApi";
 import './TopArtists.scss';
+
 const topArtists = [
   "Taylor Swift",
   "Ed Sheeran",
@@ -25,63 +26,84 @@ const topSongs = {
   "Billie Eilish": ["Bad Guy", "Happier Than Ever", "Therefore I Am"]
 };
 
-function TopArtists({ onSelectSong }) {
-  const { t } = useTranslation();
-  const [query, setQuery] = useState("");
-  const [selectedArtist, setSelectedArtist] = useState(null);
+function TopArtists() {
+  const [selectedArtist, setSelectedArtist] = useState("");
+  const [selectedSong, setSelectedSong] = useState("");
+  const [lyrics, setLyrics] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Filter artists based on search query
-  const filteredArtists = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return topArtists;
-    return topArtists.filter((a) => a.toLowerCase().includes(q));
-  }, [query]);
+  const handleArtistClick = (artist) => {
+    if (loading) return;
+    setSelectedArtist(artist);
+    setSelectedSong("");
+    setLyrics("");
+  };
+
+  const handleSongClick = async (song) => {
+    if (loading && selectedSong !== song) return;
+    setSelectedSong(song);
+    setLoading(true);
+
+    try {
+      const result = await getLyrics(selectedArtist, song);
+      setLyrics(result);
+    } catch (err) {
+      console.error(err);
+      setLyrics("Lyrics not available");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="top-artists">
-      <h1 className="top-artists__title">{t("top_artists")}</h1>
-
-      {/* Search input */}
-      <div className="top-artists__search">
-        <InputField
-          placeholder={t("artist_placeholder")}
-          value={query}
-          onChange={setQuery}
-        />
-      </div>
-
-      {/* Artist list */}
+      <h1 className="top-artists__title">Top Artists</h1>
       <ul className="top-artists__list">
-        {filteredArtists.length ? (
-          filteredArtists.map((artist, idx) => (
+        {topArtists.map((artist, idx) => {
+          const isActive = selectedArtist === artist;
+          const isDisabled = loading && !isActive; // disable only non-active artists while loading
+
+          return (
             <li
               key={idx}
-              className="top-artists__item"
-              onClick={() => setSelectedArtist(artist)}
+              className={[
+                "top-artists__list-item",
+                isActive ? 'top-artists__list-item--active' : null,
+                isDisabled ? 'top-artists__list-item--disabled' : null
+              ].filter(Boolean).join(' ')}
+              onClick={() => { if (!isDisabled) handleArtistClick(artist); }}
+              aria-disabled={isDisabled}
+              tabIndex={isDisabled ? -1 : 0}
             >
-              <span className="top-artists__link">{artist}</span>
+              {artist}
             </li>
-          ))
-        ) : (
-          <li className="top-artists__empty">{t("no_results") || "No results"}</li>
-        )}
+          );
+        })}
       </ul>
 
-      {/* Top songs for selected artist */}
       {selectedArtist && (
         <div className="top-artists__songs">
           <h2 className="top-artists__songs-title">{selectedArtist}'s Top Songs</h2>
           <ul className="top-artists__songs-list">
             {topSongs[selectedArtist]?.map((song, idx) => (
-              <li
-                key={idx}
-                className="top-artists__songs-item"
-                onClick={() => onSelectSong && onSelectSong(selectedArtist, song)}
-              >
-                {song}
+              <li key={idx} className="top-artists__songs-list-item">
+                <Button
+                  onClick={() => handleSongClick(song)}
+                  disabled={loading && selectedSong !== song}
+                  selected={selectedSong === song}
+                >
+                  {song}
+                </Button>
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {selectedSong && (
+        <div className="top-artists__lyrics">
+          <h3>Lyrics: {selectedSong}</h3>
+          {loading ? <p>Loading lyrics...</p> : <LyricsDisplay lyrics={lyrics} />}
         </div>
       )}
     </div>

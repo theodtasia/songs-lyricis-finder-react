@@ -1,7 +1,19 @@
 @use './../../scss/variables' as *;
-.home__title {
+.home{
+  &__title {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 1rem;
   color: $primary-color;
+  }
+  &__error {
+  color: red;
+  font-size: 0.85rem;
+  }
+  &__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+ }
 }
