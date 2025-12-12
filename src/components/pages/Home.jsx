@@ -11,6 +11,7 @@ import './Home.scss';
 function Home() {
   const { t } = useTranslation();
   const [lyrics, setLyrics] = useState("");
+  const [loading, setLoading] = useState(false);
   const validationSchema = Yup.object({
     artist: Yup.string().required("errors.artist_required"),
     song: Yup.string().required("errors.song_required"),
@@ -23,9 +24,14 @@ function Home() {
         initialValues={{ artist: "", song: "" }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          const result = await getLyrics(values.artist, values.song);
-          setLyrics(result);
-          setSubmitting(false);
+          setLoading(true);
+          try {
+            const result = await getLyrics(values.artist, values.song);
+            setLyrics(result);
+          } finally {
+            setLoading(false);
+            setSubmitting(false);
+          }
         }}
       >
         {({ isValid, dirty, isSubmitting }) => (
@@ -42,7 +48,7 @@ function Home() {
         )}
       </Formik>
       <hr />
-      <LyricsDisplay lyrics={lyrics} />
+      <LyricsDisplay lyrics={lyrics} loading={loading} />
     </div>
   );
 }

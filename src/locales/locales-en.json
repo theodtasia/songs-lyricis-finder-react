@@ -14,5 +14,7 @@
     "song_required": "Song name is required",
     "lyrics_not_found": "Lyrics not found. Please check the artist and song name."
   },
-  "lyrics_here": "Lyrics will appear here..."
+  "lyrics_here": "Lyrics will appear here...",
+  "lyrics_title": "Lyrics",
+  "loading": "Loading lyrics..."
 }

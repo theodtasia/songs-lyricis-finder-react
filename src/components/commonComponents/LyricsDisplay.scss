@@ -9,4 +9,21 @@
   margin-top: 1rem;
   color: #333;
   overflow: auto;
+
+  &--loader {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    gap: 1rem;
+    white-space: normal;
+
+    p {
+      color: #888;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+  }
 }

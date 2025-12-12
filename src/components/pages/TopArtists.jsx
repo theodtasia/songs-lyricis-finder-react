@@ -2,31 +2,12 @@ import { useState } from "react";
 import Button from "../commonComponents/Button";
 import LyricsDisplay from "../commonComponents/LyricsDisplay";
 import { getLyrics } from "../../services/lyricsApi";
+import { topArtists, topSongs } from "../../constants/topArtists";
 import './TopArtists.scss';
-
-const topArtists = [
-  "Taylor Swift",
-  "Ed Sheeran",
-  "Adele",
-  "Drake",
-  "Beyoncé",
-  "The Weeknd",
-  "Coldplay",
-  "Billie Eilish",
-];
-
-const topSongs = {
-  "Taylor Swift": ["Anti-Hero", "Love Story", "Blank Space"],
-  "Ed Sheeran": ["Shape of You", "Perfect", "Bad Habits"],
-  "Adele": ["Easy on Me", "Hello", "Rolling in the Deep"],
-  "Drake": ["God's Plan", "In My Feelings", "One Dance"],
-  "Beyoncé": ["Halo", "Single Ladies", "Formation"],
-  "The Weeknd": ["Blinding Lights", "Save Your Tears", "Starboy"],
-  "Coldplay": ["Yellow", "Fix You", "Viva La Vida"],
-  "Billie Eilish": ["Bad Guy", "Happier Than Ever", "Therefore I Am"]
-};
+import { useTranslation } from "react-i18next";
 
 function TopArtists() {
+  const { t } = useTranslation();
   const [selectedArtist, setSelectedArtist] = useState("");
   const [selectedSong, setSelectedSong] = useState("");
   const [lyrics, setLyrics] = useState("");
@@ -39,13 +20,13 @@ function TopArtists() {
     setLyrics("");
   };
 
-  const handleSongClick = async (song) => {
-    if (loading && selectedSong !== song) return;
-    setSelectedSong(song);
+  const handleSongClick = async (songObj) => {
+    const songTitle = songObj.title;
+    if (loading && selectedSong?.title !== songTitle) return;
+    setSelectedSong(songObj);
     setLoading(true);
-
     try {
-      const result = await getLyrics(selectedArtist, song);
+      const result = await getLyrics(selectedArtist, songTitle);
       setLyrics(result);
     } catch (err) {
       console.error(err);
@@ -61,7 +42,7 @@ function TopArtists() {
       <ul className="top-artists__list">
         {topArtists.map((artist, idx) => {
           const isActive = selectedArtist === artist;
-          const isDisabled = loading && !isActive; // disable only non-active artists while loading
+          const isDisabled = loading && !isActive; 
 
           return (
             <li
@@ -89,10 +70,10 @@ function TopArtists() {
               <li key={idx} className="top-artists__songs-list-item">
                 <Button
                   onClick={() => handleSongClick(song)}
-                  disabled={loading && selectedSong !== song}
-                  selected={selectedSong === song}
+                  disabled={loading && selectedSong?.title !== song.title}
+                  selected={selectedSong?.title === song.title}
                 >
-                  {song}
+                  {song.title}
                 </Button>
               </li>
             ))}
@@ -102,8 +83,24 @@ function TopArtists() {
 
       {selectedSong && (
         <div className="top-artists__lyrics">
-          <h3>Lyrics: {selectedSong}</h3>
-          {loading ? <p>Loading lyrics...</p> : <LyricsDisplay lyrics={lyrics} />}
+          <h3>{selectedArtist} - {selectedSong.title}</h3>
+           {selectedSong.embed && (
+            <div className="top-artists__spotify-player">
+              <iframe
+                src={selectedSong.embed}
+                width="100%"
+                height="152"
+                frameBorder="0"
+                allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"
+                title={`Spotify player for ${selectedSong.title}`}
+              />
+            </div>
+          )}
+          <div className="top-artists__lyrics-content">
+            <h4>{t("lyrics_title")}</h4>
+            <LyricsDisplay lyrics={lyrics} loading={loading} />
+          </div>
         </div>
       )}
     </div>
